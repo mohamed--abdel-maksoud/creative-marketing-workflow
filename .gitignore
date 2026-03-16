@@ -1,0 +1,4 @@
+postgres_data
+redis_data
+cms
+.env.local

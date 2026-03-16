@@ -1,0 +1,57 @@
+{
+	"id": "024b7261-014d-4310-a2ba-76e0df333b79",
+	"name": "Campaign-FR-Q1",
+	"status": "processed",
+	"target_audience": "Young professionals, possibly internationals",
+	"target_languages": [
+		"en",
+		"fr"
+	],
+	"message": "Start your morning the right way",
+	"input_assets": [
+		{
+			"id": 6,
+			"campaign_id": {
+				"id": "024b7261-014d-4310-a2ba-76e0df333b79"
+			},
+			"directus_files_id": {
+				"id": "08d7be96-2cd3-4d51-9efd-2dd1f05a839a"
+			}
+		},
+		{
+			"id": 8,
+			"campaign_id": {
+				"id": "024b7261-014d-4310-a2ba-76e0df333b79"
+			},
+			"directus_files_id": {
+				"id": "71f47be0-00de-418b-88c3-363fd1c95b3f"
+			}
+		},
+		{
+			"id": 9,
+			"campaign_id": {
+				"id": "024b7261-014d-4310-a2ba-76e0df333b79"
+			},
+			"directus_files_id": {
+				"id": "45aeed62-42af-4f12-bdff-f7cca4b2bf18"
+			}
+		}
+	],
+	"products": [
+		{
+			"id": 2,
+			"campaign_id": {
+				"id": "024b7261-014d-4310-a2ba-76e0df333b79",
+				"name": "Campaign-FR-Q1"
+			},
+			"product_id": {
+				"id": "a2dc04c7-b6a9-4aea-a1f8-c30bfa2a7bb0",
+				"name": "Fresh Morning Coffee",
+				"color_palette": "Deep Ember #8B3A3A\nGolden Ray #F4C542\nAshen Mist #B2B2B2\n",
+				"logo": {
+					"id": "c9a0b0ef-5f99-43b6-a936-ccd21a52ed2e"
+				}
+			}
+		}
+	]
+}

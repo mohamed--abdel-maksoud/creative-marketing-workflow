@@ -1,0 +1,12 @@
+celery
+redis
+requests
+crewai
+google-generativeai
+google-genai
+pillow
+opencv-python-headless
+pydantic
+python-dotenv
+langchain-google-genai
+replicate

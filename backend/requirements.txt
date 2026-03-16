@@ -1,0 +1,7 @@
+litestar
+celery
+redis
+requests
+pydantic
+python-dotenv
+uvicorn

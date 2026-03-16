@@ -1,0 +1,14 @@
+{
+	"event": "items.update",
+	"accountability": {
+		"user": "aa270dd1-213a-478c-aae4-cb558b5d3453",
+		"role": "d6b7d419-2550-4d38-a2f7-eb0c64d07ab8"
+	},
+	"payload": {
+		"status": "processed"
+	},
+	"keys": [
+		"024b7261-014d-4310-a2ba-76e0df333b79"
+	],
+	"collection": "campaign"
+}

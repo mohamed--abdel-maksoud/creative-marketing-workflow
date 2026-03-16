@@ -1,0 +1,114 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: directus
+      POSTGRES_PASSWORD: directus
+      POSTGRES_DB: directus
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U directus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - ./redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cms:
+    image: lawebcapsule/directus9:latest
+    user: "1000:1000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_CLIENT: pg
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: directus
+      DB_USER: directus
+      DB_PASSWORD: directus
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: admin123
+      KEY: admin-key
+      SECRET: admin-secret
+      PUBLIC_URL: http://localhost:8055
+      WEBSOCKETS_ENABLED: true
+    volumes:
+      - ./cms/scripts:/directus/scripts
+      - ./cms/uploads:/directus/uploads
+      - ./cms/extensions:/directus/extensions
+    ports:
+      - "8055:8055"
+    command: >
+      sh -c "
+      node /directus/cli.js bootstrap &&
+      node /directus/cli.js start
+      "
+
+  #cms-setup:
+    #image: python:3.11-slim
+    #depends_on:
+      #cms:
+        #condition: service_started
+    #environment:
+      #CMS_URL: http://cms:8055
+      #ADMIN_EMAIL: admin@example.com
+      #ADMIN_PASSWORD: admin123
+      #BACKEND_URL: http://backend:8000
+    #volumes:
+      #- ./cms/scripts:/scripts
+    #working_dir: /scripts
+    #command: >
+      #sh -c "
+      #pip install requests psycopg2-binary &&
+      #python setup.py
+      #"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+      cms:
+        condition: service_started
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CMS_URL: http://cms:8055
+      CMS_API_KEY: ${CMS_API_KEY:-admin-key}
+      SECRET_KEY: ${SECRET_KEY:-secret}
+    ports:
+      - "8000:8000"
+    command: >
+      uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+    volumes:
+      - ./backend:/app
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    depends_on:
+      redis:
+        condition: service_healthy
+      cms:
+        condition: service_started
+      backend:
+        condition: service_started
+    env_file: ./.env.local
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      CMS_URL: http://172.17.0.1:8055
+    volumes:
+      - ./worker:/app
